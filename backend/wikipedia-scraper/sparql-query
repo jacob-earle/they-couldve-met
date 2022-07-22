@@ -22,13 +22,9 @@ WHERE {
 ?x dbo:wikiPageWikiLink ?person .
 } GROUP BY ?person 
 }
+?person foaf:isPrimaryTopicOf ?wikipediaLink .
+?person dbo:thumbnail ?thumbnailLink .
 OPTIONAL { 
 ?person dbo:deathDate ?death .
-}
-OPTIONAL { 
-?person foaf:isPrimaryTopicOf ?wikipediaLink .
-}
-OPTIONAL { 
-?person dbo:thumbnail ?thumbnailLink .
 }
 } ORDER BY DESC(?linksToPage)
