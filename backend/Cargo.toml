@@ -3,4 +3,5 @@
 members = [
 	"wikipedia-scraper",
 	"people-database",
+	"api-server",
 ]

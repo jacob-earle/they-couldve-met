@@ -1,8 +1,10 @@
 use chrono::NaiveDate;
+use serde::Serialize;
 
 use super::schema::people;
 
-#[derive(Queryable)]
+#[derive(Queryable, Debug, Identifiable, Serialize)]
+#[table_name = "people"]
 pub struct Person {
     pub id: i32,
     pub name: String,
