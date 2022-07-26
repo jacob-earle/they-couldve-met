@@ -231,6 +231,7 @@ dependencies = [
  "dotenv",
  "people-database",
  "r2d2",
+ "serde",
  "tokio",
 ]
 
