@@ -8,6 +8,7 @@ use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use diesel::pg::PgConnection;
 use diesel::r2d2::ConnectionManager;
 use r2d2::Pool;
+use actix_cors::Cors;
 
 mod api;
 
@@ -43,7 +44,11 @@ async fn main() -> std::io::Result<()> {
     
     
     HttpServer::new(move || {
+        // Constructing CORS policy
+        let cors = Cors::permissive();
+
         App::new()
+            .wrap(cors)
             .configure(api::config_api)
             .app_data(web::Data::new(pool.clone()))
             .service(hello)

@@ -30,6 +30,12 @@ struct SearchQuery {
 /// Search people in the database by name
 #[get("/search")]
 async fn search_for_people(pool: web::Data<PostgresPool>, query: web::Query<SearchQuery>) -> impl Responder {
+    // Return an empty list if the search string is empty
+    if query.q.eq("") {
+        let empty_response: Vec<Person> = Vec::new();
+        return HttpResponse::Ok().json(empty_response);
+    }
+
     let conn = pool.get().expect("Could not establish connection to database from pool.");
     
     let search_string = "%".to_string() + &query.q + "%";
