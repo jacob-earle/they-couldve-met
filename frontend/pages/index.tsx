@@ -33,30 +33,28 @@ const Home: NextPage = () => {
   
   return (
     <Layout>
-      <main>
-        <h2>Step 1: Select a person</h2>
-        {
-          (selectedPerson !== null) ?
-          <div>
-            <p className='textXL'>You Have Selected:</p>
-            <PersonCard person={selectedPerson} />
-            <button onClick={
-              (e) => {
-                setResultsList([]);
-                setSelectedPerson(null);
-              }
-            }>Start Over</button>
-          </div> :
-          <SearchBar onClick={handleSelectedPerson} />
-        }
+      <h2>Step 1: Select a person</h2>
+      {
+        (selectedPerson !== null) ?
         <div>
-          <h2>Step 2: See who they could've met!</h2>
-          {selectedPerson !== null && <p className='textXL'><strong>{selectedPerson.name}</ strong> could have met:</p>}          
-            {
-              resultsList.map((person) => <PersonCard person={person}/>)
+          <p className='textXL'>You Have Selected:</p>
+          <PersonCard person={selectedPerson} />
+          <button onClick={
+            (e) => {
+              setResultsList([]);
+              setSelectedPerson(null);
             }
-        </div>
-      </main>
+          }>Start Over</button>
+        </div> :
+        <SearchBar onClick={handleSelectedPerson} />
+      }
+      <div>
+        <h2>Step 2: See who they could've met!</h2>
+        {selectedPerson !== null && <p className='textXL'><strong>{selectedPerson.name}</ strong> could have met:</p>}          
+          {
+            resultsList.map((person) => <PersonCard person={person}/>)
+          }
+      </div>
     </Layout>
   )
 }
