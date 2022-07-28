@@ -52,7 +52,7 @@ const Home: NextPage = () => {
         <h2>Step 2: See who they could've met!</h2>
         {selectedPerson !== null && <p className='textXL'><strong>{selectedPerson.name}</ strong> could have met:</p>}          
           {
-            resultsList.map((person) => <PersonCard person={person}/>)
+            resultsList.map((person) => <PersonCard key={person.id} person={person}/>)
           }
       </div>
     </Layout>
