@@ -6,6 +6,8 @@ import type Person from '../utils/person'
 import React, { useState, useEffect } from 'react'
 import PersonCard from '../components/PersonCard'
 import SearchBar from '../components/SearchBar'
+import Navbar from '../components/Navbar';
+import Layout from '../components/Layout';
 
 const apiBaseUrl = "http://localhost:5000/api/"
 
@@ -30,14 +32,8 @@ const Home: NextPage = () => {
 
   
   return (
-    <div>
-      <Head>
-        <title>They Could've Met</title>
-        <meta name="description" content="Discover who could've met." />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Layout>
       <main>
-        <h1>They Could've Met</h1>
         <h2>Step 1: Select a person</h2>
         {
           (selectedPerson !== null) ?
@@ -61,7 +57,7 @@ const Home: NextPage = () => {
             }
         </div>
       </main>
-    </div>
+    </Layout>
   )
 }
 

@@ -1,0 +1,20 @@
+.titleContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.linkContainer {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 0.5em;
+}
+
+.heading {
+    font-size: 3em;
+    color: black;
+}
+
+.navBar {
+    background-color: goldenrod;
+    margin: 0;
+}
