@@ -42,7 +42,7 @@ const Home: NextPage = () => {
         {
           (selectedPerson !== null) ?
           <div>
-            <p>You Have Selected:</p>
+            <p className='textXL'>You Have Selected:</p>
             <PersonCard person={selectedPerson} />
             <button onClick={
               (e) => {
@@ -55,12 +55,10 @@ const Home: NextPage = () => {
         }
         <div>
           <h2>Step 2: See who they could've met!</h2>
-          {selectedPerson !== null && <p>{selectedPerson.name} could have met:</p>}          
-          <ul>
+          {selectedPerson !== null && <p className='textXL'><strong>{selectedPerson.name}</ strong> could have met:</p>}          
             {
-              resultsList.map((person) => <li key={person.id}><PersonCard person={person}/></li>)
+              resultsList.map((person) => <PersonCard person={person}/>)
             }
-          </ul>
         </div>
       </main>
     </div>

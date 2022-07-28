@@ -1,0 +1,22 @@
+.cardContainer {
+    display: flex;
+    margin: 1em 0;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: space-between;
+    background-color: snow;
+    box-shadow: 3px 3px #88888888;
+    
+}
+
+.cardContainer > * {
+    margin: 0 0.2em;
+}
+
+.cardContainer > button {
+    align-self: stretch;
+    margin: 0;
+    border-radius: 8px 8px 8px 8px;
+}

@@ -32,17 +32,15 @@ const SearchBar = ({onClick}: Props) => {
   <div>
     <form onSubmit={handleSearchSubmit}>
     <label>
-        <input type="text" value={searchString} onChange={(e) => {
+        <input className="textL" type="text" value={searchString} onChange={(e) => {
         setSearchString(e.target.value);
         }}/>
     </label>
-    <button type="submit">Search</button>
+    <button className="textL" type="submit">Search</button>
     </form>
-    <ul>
     {
-        searchResultsList.map((person) => <li key={person.id}><PersonCard person={person} onClick={onClick}/></li>)
+        searchResultsList.map((person) => <PersonCard person={person} onClick={onClick}/>)
     }
-    </ul>
   </div>)
 
 }
