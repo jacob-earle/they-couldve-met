@@ -16,6 +16,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let graph_uri = String::from("http://dbpedia.org");
     let sparql_query = std::fs::read_to_string("./sparql-query")?;
     let format = String::from("application/sparql-results+json");
+    let timeout = String::from("200000");
+    let signal_void = String::from("on");
+    let signal_unconnected = String::from("on");
 
     
     // Making http request to dbpedia's public API endpoint
@@ -25,7 +28,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .query(&[
             ("default-graph-uri", &graph_uri),
             ("query", &sparql_query),
-            ("format", &format)
+            ("format", &format),
+            ("timeout", &timeout),
+            ("signal_void", &signal_void),
+            ("signal_unconnected", &signal_unconnected)
         ])
         .send()
         .await?

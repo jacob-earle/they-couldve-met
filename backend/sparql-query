@@ -12,7 +12,7 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT ?name ?birth ?death ?description_en ?wikipediaLink ?thumbnailLink ?linksToPage ?person  
 WHERE {      
 ?person dbo:birthDate ?birth .      
-?person foaf:name ?name .
+?person dbp:name ?name .
 FILTER ( lang(?name) = "en" && ?name != ""@en)      
 ?person dbo:abstract ?description_en . 
 FILTER (LANG(?description_en) = 'en') .
@@ -27,4 +27,6 @@ WHERE {
 OPTIONAL { 
 ?person dbo:deathDate ?death .
 }
+FILTER ((EXISTS {?person dbo:deathDate ?death}) || ((?birth < "2100-01-01"^^xsd:date) && (?birth  > "1900-01-01"^^xsd:date))) .
 } ORDER BY DESC(?linksToPage)
+LIMIT 2000
