@@ -33,9 +33,8 @@ async fn hello() -> impl Responder {
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    dotenv().ok();
-    
     // Setting environment variables
+    dotenv().ok();
     let host = env::var("HOST").expect("HOST not set.");
     let port = env::var("PORT").expect("PORT not set.");
     

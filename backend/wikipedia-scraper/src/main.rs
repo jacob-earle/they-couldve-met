@@ -4,17 +4,35 @@ extern crate chrono;
 
 mod response_handler;
 
-use people_database::establish_connection;
+use people_database::{establish_connection, init_database_with_migrations};
+use clap::Parser;
+
+/// Simple script that will run a SPARQL query against DBPedia to get information to populate the database
+#[derive(Parser, Debug)]
+#[clap(version)]
+struct CommandArgs {
+    /// Path to the SPARQL query. Searches for a file called "sparql-query" in the current directory if none specified
+    #[clap(short, long, value_parser, default_value = "./sparql-query")]
+    file: String,
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Parse command line args
+    let args = CommandArgs::parse();
+
     // Attempting to connect to database
     println!("Connecting to database...");
     let conn = establish_connection();
+    
+    // Perform database migrations
+    println!("Successfully connected to database. Running migrations.");
+    init_database_with_migrations(&conn);
+    
 
     // Loading and encoding the sparql query for use with the http request
     let graph_uri = String::from("http://dbpedia.org");
-    let sparql_query = std::fs::read_to_string("./sparql-query")?;
+    let sparql_query = std::fs::read_to_string(&args.file)?;
     let format = String::from("application/sparql-results+json");
     let timeout = String::from("200000");
     let signal_void = String::from("on");
@@ -45,5 +63,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     for person_info in parsed_results {
         person_info.insert_into_database(&conn);
     }
+    println!("Database populated successfully!");
     Ok(())
 }

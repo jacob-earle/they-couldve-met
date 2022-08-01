@@ -2,7 +2,7 @@ import PersonCard from "./PersonCard";
 import Person from '../utils/person';
 import { useState } from "react";
 
-const apiBaseUrl = "http://localhost:5000/api/"
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 type Props = {
   onClick: (p: Person) => void;

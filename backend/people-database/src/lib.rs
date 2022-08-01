@@ -1,5 +1,7 @@
 #[macro_use]
 extern crate diesel;
+#[macro_use]
+extern crate diesel_migrations;
 extern crate dotenv;
 extern crate chrono;
 
@@ -11,17 +13,35 @@ pub mod models;
 use diesel::prelude::*;
 use diesel::pg::PgConnection;
 use dotenv::dotenv;
-use std::env;
+use std::{env, time, thread};
 
 use self::models::{Person, NewPerson};
+
+embed_migrations!();
 
 pub fn establish_connection() -> PgConnection {
     dotenv().ok();
 
     let database_url = env::var("DATABASE_URL")
         .expect("DATA_URL must be set.");
-    PgConnection::establish(&database_url)
-        .expect(&format!("Error connecting to {}.", database_url))
+    
+    // If we cannot immediately establish connection, wait 5 seconds and try again
+    loop {
+        match PgConnection::establish(&database_url) {
+            Ok(conn) => {
+                return conn;
+            },
+            Err(_) => {
+                println!("Error connecting to {}. Will attempt to reconnect in 1 second.", &database_url);
+                thread::sleep(time::Duration::from_secs(5));
+            } 
+        }
+    }
+}
+
+/// Run migrations on connected database
+pub fn init_database_with_migrations(conn: &PgConnection) {
+    embedded_migrations::run(conn).expect("Error performing diesel migrations!");
 }
 
 

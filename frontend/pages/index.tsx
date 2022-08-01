@@ -9,7 +9,7 @@ import SearchBar from '../components/SearchBar'
 import Navbar from '../components/Navbar';
 import Layout from '../components/Layout';
 
-const apiBaseUrl = "http://localhost:5000/api/"
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const Home: NextPage = () => {
   const [resultsList, setResultsList] = useState<Array<Person>>([])
