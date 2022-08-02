@@ -4,6 +4,9 @@ const nextConfig = {
   swcMinify: true,
   images: {
     domains: ['commons.wikimedia.org']
+  },
+  publicRuntimeConfig: {
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
   }
 }
 

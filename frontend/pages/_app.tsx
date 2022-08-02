@@ -14,4 +14,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           </>
 }
 
+// Empty getInitialProps allows us to access the publicRuntimeConfig in our components
+MyApp.getInitialProps = async () => {
+  return {};
+}
+
 export default MyApp

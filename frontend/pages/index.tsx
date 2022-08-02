@@ -8,8 +8,11 @@ import PersonCard from '../components/PersonCard'
 import SearchBar from '../components/SearchBar'
 import Navbar from '../components/Navbar';
 import Layout from '../components/Layout';
+import getConfig from 'next/config';
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const {publicRuntimeConfig} = getConfig();
+
+const apiBaseUrl = publicRuntimeConfig.NEXT_PUBLIC_API_BASE_URL;
 
 const Home: NextPage = () => {
   const [resultsList, setResultsList] = useState<Array<Person>>([])
