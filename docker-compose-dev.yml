@@ -1,14 +1,17 @@
 services:
   frontend:
-    build: ./frontend
     restart: always
+    build: ./frontend
     environment:
       NEXT_PUBLIC_API_BASE_URL: ${API_BASE_URL}
     ports:
       - 3000:3000
+    volumes:
+      - ./frontend:/usr/src
+    command: npm run dev
   api:
-    build: ./backend
     restart: always
+    build: ./backend
     ports:
       - 5000:5000
     environment:
@@ -16,8 +19,8 @@ services:
       PORT: 5000
       DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
   db: 
-    image: postgres
     restart: always
+    image: postgres
     volumes:
       - people-data:/var/lib/postgresql/data
     environment:
