@@ -4,7 +4,7 @@ extern crate chrono;
 
 mod response_handler;
 
-use people_database::{establish_connection, init_database_with_migrations};
+use people_database::establish_connection;
 use clap::Parser;
 
 /// Simple script that will run a SPARQL query against DBPedia to get information to populate the database
@@ -24,11 +24,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Attempting to connect to database
     println!("Connecting to database...");
     let conn = establish_connection();
-    
-    // Perform database migrations
-    println!("Successfully connected to database. Running migrations.");
-    init_database_with_migrations(&conn);
-    
 
     // Loading and encoding the sparql query for use with the http request
     let graph_uri = String::from("http://dbpedia.org");
