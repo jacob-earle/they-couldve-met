@@ -42,7 +42,7 @@ const SearchBar = ({onClick}: Props) => {
     <button className="textL" type="submit">Search</button>
     </form>
     {
-        searchResultsList.map((person) => <PersonCard key={person.id} person={person} onClick={onClick}/>)
+        searchResultsList.map((person) => <PersonCard key={person.id} person={person} buttonProps={{onClick, buttonText: "Select"}}/>)
     }
   </div>)
 
