@@ -14,3 +14,4 @@ r2d2 = "0.8.10"
 people-database = {path = "../people-database"}
 serde = {version = "1.0", features = ["derive"]}
 actix-cors = {version = "0.6"}
+actix-session = {version = "0.7", features = ["cookie-session"]}

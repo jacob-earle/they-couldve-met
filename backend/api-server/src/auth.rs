@@ -1,0 +1,1 @@
+//! Methods for dealing with authentication and authorization of users through sessions

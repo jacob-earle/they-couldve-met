@@ -5,13 +5,16 @@ extern crate people_database;
 use dotenv::dotenv;
 use std::env;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::cookie::Key;
 use diesel::pg::PgConnection;
 use diesel::r2d2::ConnectionManager;
 use r2d2::Pool;
 use actix_cors::Cors;
 use people_database::{establish_connection, init_database_with_migrations};
+use actix_session::{Session, SessionMiddleware, storage::CookieSessionStore};
 
 mod api;
+mod auth;
 
 pub type PostgresPool = Pool<ConnectionManager<PgConnection>>;
 
@@ -38,6 +41,7 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
     let host = env::var("HOST").expect("HOST not set.");
     let port = env::var("PORT").expect("PORT not set.");
+    let secret_key = Key::generate();
     
     // Creating database management pool
     let pool = get_pool();
@@ -56,6 +60,12 @@ async fn main() -> std::io::Result<()> {
         let cors = Cors::permissive();
 
         App::new()
+            .wrap(
+                SessionMiddleware::new(
+                    CookieSessionStore::default(),
+                    secret_key.clone()
+                )
+            )
             .wrap(cors)
             .configure(api::config_api)
             .app_data(web::Data::new(pool.clone()))

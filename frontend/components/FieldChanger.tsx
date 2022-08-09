@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 
 import getConfig from 'next/config';
-import { resourceLimits } from 'worker_threads';
 
 const {publicRuntimeConfig} = getConfig();
 
