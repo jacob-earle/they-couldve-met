@@ -13,7 +13,7 @@ POSTGRES_DB=<NAME_OF_DATABASE>
 then run
 
 ```
-docker-compose up -d
+docker-compose -f docker-compose-dev.yml up -d
 ```
 
 The first time this is run, it may take some time to build the images. At this point the frontend, backend server, and database will be initialized and running, but the database will not contain any data. To run the wikipedia scraping script, execute the following command:
