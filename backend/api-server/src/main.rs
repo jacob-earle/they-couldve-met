@@ -9,6 +9,7 @@ use diesel::pg::PgConnection;
 use diesel::r2d2::ConnectionManager;
 use r2d2::Pool;
 use actix_cors::Cors;
+use people_database::{establish_connection, init_database_with_migrations};
 
 mod api;
 
@@ -41,6 +42,14 @@ async fn main() -> std::io::Result<()> {
     // Creating database management pool
     let pool = get_pool();
     
+    // Connect to database and perform migrations
+    // Attempting to connect to database
+    println!("Connecting to database...");
+    let conn = establish_connection();
+    
+    // Perform database migrations
+    println!("Successfully connected to database. Running migrations.");
+    init_database_with_migrations(&conn);
     
     HttpServer::new(move || {
         // Constructing CORS policy

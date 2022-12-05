@@ -41,7 +41,7 @@ pub fn establish_connection() -> PgConnection {
 
 /// Run migrations on connected database
 pub fn init_database_with_migrations(conn: &PgConnection) {
-    embedded_migrations::run(conn).expect("Error performing diesel migrations!");
+    embedded_migrations::run_with_output(conn, &mut std::io::stdout()).expect("Error performing diesel migrations!");
 }
 
 

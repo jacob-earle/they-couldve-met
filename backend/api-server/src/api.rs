@@ -1,5 +1,5 @@
 use actix_web::{web, Responder, HttpResponse};
-use diesel::{RunQueryDsl, QueryDsl, BoolExpressionMethods, ExpressionMethods, PgTextExpressionMethods};
+use diesel::{RunQueryDsl, QueryDsl, BoolExpressionMethods, ExpressionMethods, PgTextExpressionMethods, delete, update};
 use people_database::schema::people::dsl::*;
 use people_database::models::Person;
 use serde::Deserialize;
@@ -11,8 +11,12 @@ pub fn config_api(cfg: &mut web::ServiceConfig) {
         web::scope("/api")
             .service(api_greeter)
             .service(search_for_people)
-            .service(get_person_by_id)
             .service(get_matches_for_person_with_id)
+            .service(get_all_people)
+            .service(get_person_by_id)
+            // routes that need to be configured for authentication
+            .service(update_person_by_id)
+            .service(delete_person_by_id)
     );
 }
 
@@ -64,6 +68,18 @@ async fn get_person_by_id(pool: web::Data<PostgresPool>, person_id: web::Path<i3
     HttpResponse::Ok().json(person)
 }
 
+/// Get records for all people in database
+#[get("/all")]
+async fn get_all_people(pool: web::Data<PostgresPool>) -> impl Responder {
+    let conn = pool.get().expect("Could not establish connection to database from pool.");
+    let person_list: Vec<Person> = people
+        .order(id.asc())
+        .load(&conn)
+        .expect("Error loading people from database.");
+    
+    HttpResponse::Ok().json(person_list)
+}
+
 /// Find all people a person could have met
 /// I.e. all people who were alive during a person's life
 /// So, the people who died after a person was born and who were born before the person died
@@ -99,4 +115,45 @@ async fn get_matches_for_person_with_id(pool: web::Data<PostgresPool>, person_id
     };
     
     HttpResponse::Ok().json(matching_people_list)
+}
+
+
+// Past this point are API endpoints the will require authentication
+
+/// Struct containing fields that can be updated for a person
+/// For now it is only necessary to update the person's name, but more functionality could be added in the future
+#[derive(Deserialize)]
+struct PersonUpdate {
+    new_name: Option<String>,
+}
+
+/// Update info on the person with the given id
+#[post("/{person_id}")]
+async fn update_person_by_id(pool: web::Data<PostgresPool>, person_id: web::Path<i32>, update_info: web::Json<PersonUpdate>) -> impl Responder {
+    let person_id_deref = person_id.into_inner();
+    
+    let conn = pool.get().expect("Could not establish connection to database from pool.");
+    
+    let mut person: Person = people.find(person_id_deref).get_result(&conn).expect("Could not find person.");
+
+    if let Some(new_name) = &update_info.new_name {
+        person = update(&person).set(name.eq(new_name)).get_result(&conn).expect("Error updating person.");
+    }
+    
+    HttpResponse::Ok().json(person)
+}
+
+/// Delete the person with the given id
+#[delete("/{person_id}")]
+async fn delete_person_by_id(pool: web::Data<PostgresPool>, person_id: web::Path<i32>) -> impl Responder {
+    let person_id_deref = person_id.into_inner();
+    
+    let conn = pool.get().expect("Could not establish connection to database from pool.");
+    
+    let person: Person = delete(
+        people.find(person_id_deref)
+    ).get_result(&conn)
+    .expect("Error deleting person.");
+    
+    HttpResponse::Ok().json(person)
 }
